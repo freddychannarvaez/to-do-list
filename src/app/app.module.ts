@@ -6,10 +6,12 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { BasicModule } from './common/basic.module';
+import { ListScreenComponent } from './components/list-screen/list-screen.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    ListScreenComponent
   ],
   imports: [
     BrowserModule,

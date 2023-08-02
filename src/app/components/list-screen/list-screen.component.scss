@@ -1,0 +1,22 @@
+.list-container {
+  display: flex;
+  flex-direction: column;
+  
+  .title-container {
+    background-color: red;
+
+  }
+
+  .notes-container {
+    
+    .note {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      padding: 2px 20px;
+      // width: 100%;
+      height: 40px;
+      border: 1px solid gray;
+    }
+  }
+}
