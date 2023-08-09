@@ -4,15 +4,16 @@
     <span>Today's date</span>
   </div>
   <div class="notes-container">
-    <div *ngFor="let note of notes" class="note">
+    <div *ngFor="let note of notes; index as i" class="note" (click)="editNote(i)">
       <mat-radio-button></mat-radio-button>
-      <span>{{note}}</span>
-      <button mat-icon-button><mat-icon>star</mat-icon></button>
+      <span>{{note.content}}</span>
+      <mat-button-toggle mat-icon-button><mat-icon>grade</mat-icon></mat-button-toggle>
     </div>
   </div>
-  <form [formGroup]="formGroup" (ngSubmit)="createNote()">
-    <mat-form-field>
-      <input matInput placeholder="label" value="value" formControlName="newNote">
+  <form [formGroup]="formGroup" (ngSubmit)="createNote()" #theForm="ngForm">
+    <mat-form-field appearance="outline">
+      <mat-icon matIconPrefix>add</mat-icon>
+      <input matInput placeholder="Add new note..." formControlName="newNote">
     </mat-form-field>
   </form>
 

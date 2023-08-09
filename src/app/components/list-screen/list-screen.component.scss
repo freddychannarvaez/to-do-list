@@ -1,6 +1,9 @@
+$item-height: 56px;
+
 .list-container {
   display: flex;
   flex-direction: column;
+  // flex: 0 0 100%;
   
   .title-container {
     background-color: red;
@@ -13,10 +16,22 @@
       display: flex;
       flex-direction: row;
       justify-content: space-between;
+      box-sizing: border-box;
       padding: 2px 20px;
       // width: 100%;
-      height: 40px;
+      height: $item-height;
       border: 1px solid gray;
     }
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    // align-items: center;
+    height: $item-height;
+    flex: 0 0 100%;
+    // mat-form-field {
+    //   // flex: 0 0 98%;
+    // }
   }
 }
