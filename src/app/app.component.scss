@@ -4,6 +4,7 @@ mat-sidenav-container, mat-sidenav-content, mat-sidenav {
 
 mat-sidenav {
   box-shadow: 0px 0px 5px gray !important;
+  width: 250px;
 }
 
 // ----------------------------------------------------------
@@ -36,7 +37,7 @@ mat-toolbar{
   min-height: 64px;
 }
 
-.atease-logo {
+.main-logo {
   width: 93px;
   height: 32px;
   cursor: pointer;
@@ -96,12 +97,20 @@ a {
 }
 
 .nav-list{
-  height: 100%;
+  // height: 100%;
+  display: flex;
+  flex-direction: column;
 
   mat-icon {
-    width: 18px;
-    height: 18px;
+    // width: 18px;
+    // height: 18px;
   }
+}
+
+.search-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }
 
 .list-container {
@@ -114,16 +123,21 @@ a {
   margin-left: 20px;
 }
 
-.item-color{
+.list-item{
   color: #525252;
   height: 50px !important;
   font-size: 16px;
+  display: flex;
+  flex-direction: row;
+
 }
 
 ::ng-deep .mdc-list-item__primary-text {
   height: 30px;
   display: flex;
   align-items: center;
+  justify-content: flex-start;
+  // column-gap: 20px;
 }
 
 .rights-reserved {

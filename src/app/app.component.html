@@ -18,11 +18,30 @@
     role="navigation">
     <mat-nav-list class="nav-list">
 
+      <!-- App name -->
+
+      <!-- Username -->
+
+      <!-- Search bar -->
+      <div class="search-container"> 
+        <mat-form-field appearance="outline">
+          <input matInput placeholder="Search..." (keyup)="onSearch($event.target)">
+        </mat-form-field>
+      </div>
+
+      <!-- Stacked list -->
       <div class="list-container">
-        <a mat-list-item class="item-color"
+        <a mat-list-item class="list-item"
           routerLink="/">
-          <mat-icon svgIcon="dashboard"></mat-icon>
+          <mat-icon>add</mat-icon>
           <span class="nav-caption">Notes</span>
+          <span></span>
+        </a>        
+        <a mat-list-item class="list-item"
+          routerLink="/">
+          <mat-icon>sunny</mat-icon>
+          <span class="nav-caption">Daily</span>
+          <span></span>
         </a>        
       </div>
 
@@ -37,8 +56,21 @@
   <mat-sidenav-content>
 
     <main>
-      <router-outlet></router-outlet>
+      <!-- <router-outlet (newItemEvent)="sidenav2.toggle()"></router-outlet> -->
+      <app-list-screen (newItemEvent)="sidenav2.toggle()"></app-list-screen>
     </main>
 
   </mat-sidenav-content>
+
+  <mat-sidenav
+    mode="side" #sidenav2
+    position="end" closed
+    role="none">
+    <mat-nav-list class="nav-list">
+      <div>
+        <span>SOMETHING</span>
+      </div>
+    </mat-nav-list>
+
+  </mat-sidenav>
 </mat-sidenav-container>
