@@ -23,26 +23,43 @@
       <!-- Username -->
 
       <!-- Search bar -->
-      <div class="search-container"> 
+      <form #searchForm="ngForm" class="search-container"> 
         <mat-form-field appearance="outline">
-          <input matInput placeholder="Search..." (keyup)="onSearch($event.target)">
+          <input matInput placeholder="Search all notes..." (keyup)="onSearch($event.target)"
+            name="search" #search="ngModel" ngModel>
+          <button mat-icon-button matIconSuffix (click)="searchForm.reset()"><mat-icon>clear</mat-icon></button>
         </mat-form-field>
-      </div>
+      </form>
 
       <!-- Stacked list -->
-      <div class="list-container">
+      <div class="list-container" cdkDropList
+        (cdkDropListDropped)="onDropList($event)">
         <a mat-list-item class="list-item"
-          routerLink="/">
-          <mat-icon>add</mat-icon>
-          <span class="nav-caption">Notes</span>
+          routerLink="/" (click)="onShowAllNotes()">
+          <mat-icon>note</mat-icon>
+          <span class="nav-caption">All notes</span>
           <span></span>
         </a>        
         <a mat-list-item class="list-item"
-          routerLink="/">
+          routerLink="/" (click)="onShowDailyNotes()">
           <mat-icon>sunny</mat-icon>
           <span class="nav-caption">Daily</span>
           <span></span>
         </a>        
+        <a *ngFor="let list of lists; index as i"
+          mat-list-item class="list-item" cdkDrag
+          (click)="onSelectList(i)">
+          <mat-icon>menu</mat-icon>
+          <span class="nav-caption">{{list.title}}</span>
+          <span></span>
+        </a>
+        <form (ngSubmit)="createList(listForm)" #listForm="ngForm">
+          <mat-form-field appearance="outline">
+            <mat-icon matIconPrefix>add</mat-icon>
+            <input matInput placeholder="Add new list..."
+              name="newList" #newList="ngModel" ngModel>
+          </mat-form-field>
+        </form>   
       </div>
 
       <div class="rights-reserved">
@@ -57,7 +74,8 @@
 
     <main>
       <!-- <router-outlet (newItemEvent)="sidenav2.toggle()"></router-outlet> -->
-      <app-list-screen (newItemEvent)="sidenav2.toggle()"></app-list-screen>
+      <app-list-screen (newItemEvent)="sidenav2.toggle(); onSelectNote($event)"
+        [result]="notes" [list]="currentList" [isDraggable]="isDraggable"></app-list-screen>
     </main>
 
   </mat-sidenav-content>
@@ -67,9 +85,15 @@
     position="end" closed
     role="none">
     <mat-nav-list class="nav-list">
-      <div>
-        <span>SOMETHING</span>
-      </div>
+      <!-- <form [formGroup]="formGroup" (ngSubmit)="onUpdateNote()"> -->
+      <form [formGroup]="formGroup">
+        <mat-form-field>
+          <input matInput formControlName="content">
+        </mat-form-field>
+        <button mat-button type="button" (click)="onUpdateNote()">Save</button>
+        <button mat-button color="warn" type="button">Delete</button>
+        <!-- <span>{{currentNote.title}}</span> -->
+      </form>
     </mat-nav-list>
 
   </mat-sidenav>
