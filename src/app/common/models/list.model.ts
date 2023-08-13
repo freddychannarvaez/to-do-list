@@ -1,11 +1,9 @@
-import { Note } from "./note.model";
-
 export interface List {
-  id: number;
+  id?: number;
   dateCreated: number;
   title: string;
   isArchived: boolean;
   isFavorite: boolean;
-  notes: Note[];
+  notes: number[];
   position: number;
 }
