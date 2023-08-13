@@ -105,4 +105,13 @@ export class NoteService {
     // return note;
     return this.http.post<Note>(`${this.baseurl}/note`, JSON.stringify(note), this.httpOptions);
   }
+
+  update(id: number, note: Note) {
+    console.log("🚀 ~ file: note.service.ts:104 ~ NoteService ~ create ~ note:", note);
+    return this.http.patch<Note>(`${this.baseurl}/note/${id}`, JSON.stringify({...note}), this.httpOptions);
+  }
+
+  delete(id: number) {
+    return this.http.delete<Note>(`${this.baseurl}/note/${id}`, this.httpOptions);
+  }
 }
