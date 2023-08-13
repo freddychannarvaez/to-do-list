@@ -1,0 +1,12 @@
+<form (ngSubmit)="renameList(renameForm)" #renameForm="ngForm">
+  <h1 mat-dialog-title>Rename list</h1>
+  <mat-form-field appearance="outline">
+    <mat-icon matIconPrefix>add</mat-icon>
+    <input matInput placeholder="Write a name..."
+      name="newList" #newList="ngModel" ngModel required [(ngModel)]="title">
+  </mat-form-field>
+  <div mat-dialog-actions>
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-button mat-dialog-close cdkFocusInitial (click)="renameList(renameForm)">Save</button>
+  </div>
+</form>
