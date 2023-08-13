@@ -6,8 +6,10 @@ $item-height: 56px;
   // flex: 0 0 100%;
   
   .title-container {
-    background-color: red;
-
+    // background-color: red;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
   }
 
   .notes-container {

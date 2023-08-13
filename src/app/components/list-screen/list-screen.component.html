@@ -1,13 +1,40 @@
 <div class="list-container">
   <div class="title-container">
     <h3>{{title}}</h3>
-    <span>Today's date</span>
+    <div>
+      <button mat-icon-button *ngIf="isDraggable"
+        [matMenuTriggerFor]="menu"><mat-icon>more_vert</mat-icon></button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="onRenameList()">Change list name</button>
+        <button mat-menu-item [matMenuTriggerFor]="orderBy">Order by</button>
+        <mat-menu #orderBy="matMenu">
+          <button mat-menu-item (click)="onSortListBy(0)">
+            <mat-icon>sort_by_alpha</mat-icon>
+            Alphabetically
+          </button>
+          <button mat-menu-item (click)="onSortListBy(1)">
+            <mat-icon>calendar_month</mat-icon>
+            Creation date
+          </button>
+          <button mat-menu-item (click)="onSortListBy(2)">
+            <mat-icon>star_outlined</mat-icon>
+            Importance
+          </button>
+        </mat-menu>
+        <button mat-menu-item (click)="onDuplicateList()">Duplicate list</button>
+        <button mat-menu-item (click)="onDeleteList()">Delete list</button>
+      </mat-menu>
+    </div>
+    <!-- <span>Today's date</span> -->
   </div>
-  <div class="notes-container">
-    <div *ngFor="let note of notes; index as i" class="note" (click)="editNote(i)">
-      <mat-radio-button></mat-radio-button>
+  <div class="notes-container"cdkDropList
+    (cdkDropListDropped)="onDropNote($event)">
+    <div *ngFor="let note of result; index as i"
+    (click)="editNote(i)" cdkDrag [cdkDragDisabled]="!isDraggable">
+    <app-note-block [note]="note" class="note"></app-note-block>
+      <!-- <mat-radio-button></mat-radio-button>
       <span>{{note.content}}</span>
-      <mat-button-toggle mat-icon-button><mat-icon>grade</mat-icon></mat-button-toggle>
+      <mat-button-toggle mat-icon-button><mat-icon>grade</mat-icon></mat-button-toggle> -->
     </div>
   </div>
   <form [formGroup]="formGroup" (ngSubmit)="createNote()" #theForm="ngForm">
@@ -16,5 +43,4 @@
       <input matInput placeholder="Add new note..." formControlName="newNote">
     </mat-form-field>
   </form>
-
 </div>
