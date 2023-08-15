@@ -1,9 +1,10 @@
-<!-- <mat-radio-button [checked]="note.isArchived"></mat-radio-button> -->
-<mat-checkbox (change)="changeCompletedStatus($event)" [checked]="note.isArchived"></mat-checkbox>
-  <span>{{note.content}}</span>
-<!-- <mat-button-toggle mat-icon-button><mat-icon>grade</mat-icon></mat-button-toggle> -->
-<!-- <mat-checkbox class="star"></mat-checkbox> -->
-
-<mat-slide-toggle (change)="changeDailyStatus($event)" [checked]="note.isFavorite">
+<mat-checkbox (change)="changeCompletedStatus($event)"
+  [checked]="note.isArchived"
+  [matTooltip]="'Mark as ' + (note.isArchived ? 'uncompleted' : 'completed')"></mat-checkbox>
+<span class="clickable" (click)="onEditNote()" matTooltip="Edit note"
+  [ngClass]="{'strikethrough': note.isArchived}">{{note.content}}</span>
+<mat-slide-toggle (change)="changeDailyStatus($event)"
+  [checked]="note.isFavorite"
+  [matTooltip]="(note.isFavorite ? 'Remove from' : 'Add to') + ' daily'">
   Daily
 </mat-slide-toggle>

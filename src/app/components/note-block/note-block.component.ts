@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { Note } from 'src/app/common/models/note.model';
 import { NoteService } from 'src/app/common/services/note.service';
 
@@ -9,33 +10,64 @@ import { NoteService } from 'src/app/common/services/note.service';
 })
 export class NoteBlockComponent {
   @Input() note!: Note;
+  @Output() editNote = new EventEmitter<boolean>();
+  @Output() changedDailyStatus = new EventEmitter<boolean>();
+  subscriptions: Subscription[] = [];
+  
 
   constructor(private noteService: NoteService) {}
 
-  ngOnInit(): void {
-    console.log(this.note);
-    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
-    //Add 'implements OnInit' to the class.
-    
+  /**
+   * Change the completion status of the note.
+   * @param e Checkbox event on change
+   */
+  changeCompletedStatus(e: any): void {
+    this.subscriptions.push(
+      this.noteService.update(this.note.id!, {...this.note, isArchived: e.checked})
+        .subscribe((updateResult) => {
+          this.note = updateResult;
+          if (e.checked) this.playAudio();
+        })
+    );
   }
 
-  changeCompletedStatus(e: any) {
-    console.log("🚀 ~ file: note-block.component.ts:23 ~ NoteBlockComponent ~ onChangeCheckboxValue ~ e:", e.checked);
-    this.noteService.update(this.note.id!, {...this.note, isArchived: e.checked}).subscribe((x) => {
-      console.log(x);
-    });
+  /**
+   * Emits true when note content is clicked.
+   */
+  onEditNote(): void {
+    this.editNote.emit(true);
   }
 
-  changeDailyStatus(e: any) {
-    console.log("🚀 ~ file: note-block.component.ts:27 ~ NoteBlockComponent ~ changeDailyStatus ~ e:", e.checked)
-    this.noteService.update(this.note.id!, {...this.note, isFavorite: e.checked}).subscribe((x) => {
-      console.log(x);
-    });
+  /**
+   * Change if the note is added to daily or not.
+   * @param e Slide toggle event on change.
+   */
+  changeDailyStatus(e: any): void {
+    this.subscriptions.push(
+      this.noteService.update(this.note.id!, {...this.note, isFavorite: e.checked})
+        .subscribe((updateResult) => {
+          if (e.checked) this.playAudio(false);
+          this.changedDailyStatus.emit(e.checked);
+        })
+    );
+  }
+
+  /**
+   * Plays audio notification for note status change
+   * @param isCompletion True when changing completed status, false when changing daily status.
+   */
+  playAudio(isCompletion = true): void {
+    let audio = new Audio();
+    audio.src = `../../assets/audio/${!isCompletion ? 'long-pop' : 'happy-bell'}.wav`;
+    audio.load();
+    audio.play();
   }
 
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
-    
+    for (const subscription of this.subscriptions) {
+      subscription.unsubscribe();
+    }
   }
 }
