@@ -1,6 +1,9 @@
 <div class="list-container">
   <div class="title-container">
-    <h3>{{title}}</h3>
+    <!-- List title -->
+    <h1>{{title}}</h1>
+
+    <!-- Tridot menu -->
     <div>
       <button mat-icon-button *ngIf="isDraggable"
         [matMenuTriggerFor]="menu"><mat-icon>more_vert</mat-icon></button>
@@ -25,18 +28,20 @@
         <button mat-menu-item (click)="onDeleteList()">Delete list</button>
       </mat-menu>
     </div>
-    <!-- <span>Today's date</span> -->
   </div>
+
+  <!-- Stacked notes -->
   <div class="notes-container"cdkDropList
     (cdkDropListDropped)="onDropNote($event)">
     <div *ngFor="let note of result; index as i"
-    (click)="editNote(i)" cdkDrag [cdkDragDisabled]="!isDraggable">
-    <app-note-block [note]="note" class="note"></app-note-block>
-      <!-- <mat-radio-button></mat-radio-button>
-      <span>{{note.content}}</span>
-      <mat-button-toggle mat-icon-button><mat-icon>grade</mat-icon></mat-button-toggle> -->
+      cdkDrag [cdkDragDisabled]="!isDraggable">
+      <app-note-block [note]="note" class="note" (editNote)="editNote(i)" 
+        (changedDailyStatus)="onEmitDailyStatus(i, $event)"
+        (changedCompletedStatus)="onEmitCompletedStatus(i, $event)"></app-note-block>
     </div>
   </div>
+
+  <!-- Create note form -->
   <form [formGroup]="formGroup" (ngSubmit)="createNote()" #theForm="ngForm">
     <mat-form-field appearance="outline">
       <mat-icon matIconPrefix>add</mat-icon>
