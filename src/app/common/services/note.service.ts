@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Note } from '../models/note.model';
-import { Observable, map } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription, map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +10,18 @@ export class NoteService {
   // Base url
   baseurl = 'http://localhost:3000';
 
-  constructor(private http: HttpClient) { }
+  private _currentNotes$ = new BehaviorSubject<Note[]>([]);
+  public readonly currentNotes$ = this._currentNotes$.asObservable();
+  subscriptions: Subscription[] = [];
+
+
+  constructor(private http: HttpClient) {
+    this.subscriptions.push(
+      this.getAllNotes().subscribe((notes) => {
+        this._currentNotes$.next(notes);
+      })
+    );
+   }
 
   // Http Headers
   httpOptions = {
@@ -20,7 +31,15 @@ export class NoteService {
     }),
   };
 
-  getAllNotes() {
+  updateNotesSubject(notes: Note[]) {
+    this._currentNotes$.next(notes);
+  }
+
+  /**
+   * Gets all existing notes.
+   * @returns Observable with the notes array.
+   */
+  getAllNotes(): Observable<Note[]> {
     return this.http.get<Note[]>(`${this.baseurl}/note`, this.httpOptions)
     .pipe(map((notes) => {
       return notes.map((note: Note) => {
@@ -38,7 +57,11 @@ export class NoteService {
     }));
   }
 
-  getTodayNotes() {
+  /**
+   * Gets all daily notes.
+   * @returns Observable with the notes array.
+   */
+  getTodayNotes(): Observable<Note[]> {
     return this.http.get<Note[]>(`${this.baseurl}/note/favorites`, this.httpOptions)
     .pipe(map((notes) => {
       return notes.map((note: Note) => {
@@ -56,7 +79,12 @@ export class NoteService {
     }));
   }
 
-  get(id: number) {
+  /**
+   * Gets a note by id.
+   * @param id Id of the note to find.
+   * @returns Observable containing the note.
+   */
+  get(id: number): Observable<Note> {
     return this.http.get<Note>(`${this.baseurl}/note/${id}`, this.httpOptions)
     .pipe(map((note) => {
       return {
@@ -72,8 +100,12 @@ export class NoteService {
     }));
   }
 
-  search(value: string) {
-    console.log("🚀 ~ file: note.service.ts:58 ~ NoteService ~ search ~ value:", value)
+  /**
+   * Returns all notes that match the value, by content property.
+   * @param value Text string to search for.
+   * @returns Observable with the notes array.
+   */
+  search(value: string): Observable<Note[]> {
     return this.http.get<Note[]>(`${this.baseurl}/note/search/${value}`, this.httpOptions)
     .pipe(map((notes) => {
       return notes.map((note: Note) => {
@@ -91,7 +123,14 @@ export class NoteService {
     }));
   }
   
-  create(content: string, position: number, isFavorite = false) {
+  /**
+   * Creates a note.
+   * @param content Content property of the note.
+   * @param position Position property of the note.
+   * @param isFavorite If note is marked as Daily Note.
+   * @returns Observable of the created note.
+   */
+  create(content: string, position: number, isFavorite = false): Observable<Note> {
     const note: Note = {
       dateCreated: Date.now().valueOf(),
       title: '',
@@ -101,17 +140,25 @@ export class NoteService {
       images: [],
       position: position
     }
-    console.log("🚀 ~ file: note.service.ts:104 ~ NoteService ~ create ~ note:", note);
-    // return note;
     return this.http.post<Note>(`${this.baseurl}/note`, JSON.stringify(note), this.httpOptions);
   }
 
-  update(id: number, note: Note) {
-    console.log("🚀 ~ file: note.service.ts:104 ~ NoteService ~ create ~ note:", note);
+  /**
+   * Updates a note.
+   * @param id Id of the note to update.
+   * @param note Note data.
+   * @returns Observable of the updated note.
+   */
+  update(id: number, note: Note): Observable<Note> {
     return this.http.patch<Note>(`${this.baseurl}/note/${id}`, JSON.stringify({...note}), this.httpOptions);
   }
 
-  delete(id: number) {
+  /**
+   * Deletes a note by id.
+   * @param id Id of the note to delete.
+   * @returns Observable of the deleted note.
+   */
+  delete(id: number): Observable<Note> {
     return this.http.delete<Note>(`${this.baseurl}/note/${id}`, this.httpOptions);
   }
 }
