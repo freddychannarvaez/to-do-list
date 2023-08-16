@@ -12,6 +12,7 @@ export class NoteBlockComponent {
   @Input() note!: Note;
   @Output() editNote = new EventEmitter<boolean>();
   @Output() changedDailyStatus = new EventEmitter<boolean>();
+  @Output() changedCompletedStatus = new EventEmitter<boolean>();
   subscriptions: Subscription[] = [];
   
 
@@ -23,9 +24,11 @@ export class NoteBlockComponent {
    */
   changeCompletedStatus(e: any): void {
     this.subscriptions.push(
-      this.noteService.update(this.note.id!, {...this.note, isArchived: e.checked})
+      this.noteService.update(this.note.id!, {...this.note,isArchived: e.checked,
+        position: e.checked ? this.note.position + 100 : this.note.position - 100})
         .subscribe((updateResult) => {
           this.note = updateResult;
+          this.changedCompletedStatus.emit(e.checked);
           if (e.checked) this.playAudio();
         })
     );
