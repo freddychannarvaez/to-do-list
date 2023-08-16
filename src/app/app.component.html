@@ -3,6 +3,7 @@
   <mat-toolbar-row>
     <div class="logo-container">
       <button mat-icon-button
+          id="toggleButton"
           (click)="sidenav.toggle()"
           color="primary">
         <mat-icon>menu</mat-icon>
@@ -24,7 +25,7 @@
       <!-- Search bar -->
       <form #searchForm="ngForm" class="search-container"> 
         <mat-form-field appearance="outline">
-          <input matInput placeholder="Search all notes..." (keyup)="onSearch($event, searchForm)"
+          <input id="search-input" matInput placeholder="Search all notes..." (keyup)="onSearch($event, searchForm)"
             name="search" #search="ngModel" ngModel>
           <mat-icon *ngIf="searchForm.pristine" matIconSuffix>search</mat-icon>
           <button *ngIf="searchForm.dirty" mat-icon-button matIconSuffix (click)="onClearSearch(searchForm)"><mat-icon>clear</mat-icon></button>

@@ -1,7 +1,7 @@
 <div class="list-container">
   <div class="title-container">
     <!-- List title -->
-    <h1>{{title}}</h1>
+    <h1 id="title">{{title}}</h1>
 
     <!-- Tridot menu -->
     <div>
@@ -45,7 +45,7 @@
   <form [formGroup]="formGroup" (ngSubmit)="createNote()" #theForm="ngForm">
     <mat-form-field appearance="outline">
       <mat-icon matIconPrefix>add</mat-icon>
-      <input matInput placeholder="Add new note..." formControlName="newNote">
+      <input id="create-input" matInput placeholder="Add new note..." formControlName="newNote">
     </mat-form-field>
   </form>
 </div>
