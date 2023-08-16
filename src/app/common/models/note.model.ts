@@ -1,7 +1,7 @@
 
 export interface Note {
   id?: number;
-  dateCreated: number;
+  dateCreated: number | string;
   title: string;
   content: string;
   isArchived: boolean;

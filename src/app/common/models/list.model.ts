@@ -1,6 +1,6 @@
 export interface List {
   id?: number;
-  dateCreated: number;
+  dateCreated: number | string;
   title: string;
   isArchived: boolean;
   isFavorite: boolean;
