@@ -223,7 +223,7 @@ export class ListScreenComponent {
         break;
 
       case SortingOptions.creationDate:
-        this.result = [...this.result.sort((x, y) => x.dateCreated - y.dateCreated)];
+        this.result = [...this.result.sort((x, y) => +x.dateCreated - +y.dateCreated)];
         break;
         
       case SortingOptions.importance:
