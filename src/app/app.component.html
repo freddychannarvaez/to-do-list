@@ -1,4 +1,5 @@
-<mat-toolbar>
+<mat-toolbar color="primary">
+  <!-- Top bar -->
   <mat-toolbar-row>
     <div class="logo-container">
       <button mat-icon-button
@@ -8,6 +9,9 @@
       </button>
     </div>
 
+    <div class="title-container">
+      <span>To Do App</span>
+    </div>
   </mat-toolbar-row>
 </mat-toolbar>
 
@@ -17,17 +21,13 @@
     position="start" opened
     role="navigation">
     <mat-nav-list class="nav-list">
-
-      <!-- App name -->
-
-      <!-- Username -->
-
       <!-- Search bar -->
       <form #searchForm="ngForm" class="search-container"> 
         <mat-form-field appearance="outline">
-          <input matInput placeholder="Search all notes..." (keyup)="onSearch($event.target)"
+          <input matInput placeholder="Search all notes..." (keyup)="onSearch($event, searchForm)"
             name="search" #search="ngModel" ngModel>
-          <button mat-icon-button matIconSuffix (click)="searchForm.reset()"><mat-icon>clear</mat-icon></button>
+          <mat-icon *ngIf="searchForm.pristine" matIconSuffix>search</mat-icon>
+          <button *ngIf="searchForm.dirty" mat-icon-button matIconSuffix (click)="onClearSearch(searchForm)"><mat-icon>clear</mat-icon></button>
         </mat-form-field>
       </form>
 
@@ -62,6 +62,7 @@
         </form>   
       </div>
 
+      <!-- No licensed code was harmed during this project -->
       <div class="rights-reserved">
         <span>© FreddyChanNarvaez 2023</span>
         <span>All Rights Reserved</span>
@@ -72,27 +73,32 @@
 
   <mat-sidenav-content>
 
+    <!-- List screen -->
     <main>
-      <!-- <router-outlet (newItemEvent)="sidenav2.toggle()"></router-outlet> -->
-      <app-list-screen (newItemEvent)="sidenav2.toggle(); onSelectNote($event)"
-        [result]="notes" [list]="currentList" [isDraggable]="isDraggable"></app-list-screen>
+      <app-list-screen (newItemEvent)="onSelectNote($event)" [result]="notes" [list]="currentList"
+        [isDraggable]="isDraggable" (changedDailyStatus)="onChangeDailyStatus($event)"
+        (changedCompletedStatus)="onChangeCompletedStatus($event)"></app-list-screen>
     </main>
 
   </mat-sidenav-content>
 
+  <!-- Right side bar -->
   <mat-sidenav
     mode="side" #sidenav2
     position="end" closed
     role="none">
     <mat-nav-list class="nav-list">
-      <!-- <form [formGroup]="formGroup" (ngSubmit)="onUpdateNote()"> -->
-      <form [formGroup]="formGroup">
+      <form [formGroup]="formGroup" #editNoteForm="ngForm">
         <mat-form-field>
           <input matInput formControlName="content">
         </mat-form-field>
-        <button mat-button type="button" (click)="onUpdateNote()">Save</button>
-        <button mat-button color="warn" type="button">Delete</button>
-        <!-- <span>{{currentNote.title}}</span> -->
+        <div class="edit-buttons">
+          <button mat-raised-button color="primary" type="button" (click)="onUpdateNote()">Save</button>
+          <button mat-raised-button type="button" (click)="sidenav2.close()">Cancel</button>
+          <button mat-raised-button color="warn" type="button"
+            (click)="onDeleteNote()" [disabled]="currentList.id! < 0">Delete</button>
+          <span class="warning" *ngIf="currentList.id! < 0">Go to the list to delete note</span>
+        </div>
       </form>
     </mat-nav-list>
 

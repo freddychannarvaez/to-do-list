@@ -17,9 +17,8 @@ mat-toolbar{
   box-shadow: 0 5px 5px -5px gray !important;
   position: relative;
   z-index: 100;
-
+  
   mat-toolbar-row{
-    background: white !important;
     color: #333; 
     height: 64px;
     width: 100%;
@@ -37,46 +36,24 @@ mat-toolbar{
   min-height: 64px;
 }
 
-.main-logo {
-  width: 93px;
-  height: 32px;
-  cursor: pointer;
-}
 
 .logo-container {
   display: flex;
   flex-direction: row;
   column-gap: 10px;
   align-items: center;
+
+  mat-icon {
+    color: white !important;
+  }
 }
 
-img {
-  width: auto;
-  height: 50px;
-  object-fit: contain;
-}
-
-.profile-container {
+.title-container {
   display: flex;
   flex-direction: row;
-  column-gap: 20px;
   align-items: center;
-}
-
-.support-container {
-  font-size: 16px;
-  cursor: pointer;
-}
-
-.vertical-line {
-  border-left: 1px solid #D8D8D8;
-  height: 32px;
-}
-
-.profile-picture {
-  width: 40px;
-  height: 40px;
-  cursor: pointer;
+  color: white;
+  font-size: 20px;
 }
     
 // ----------------------------------------------------------
@@ -97,13 +74,20 @@ a {
 }
 
 .nav-list{
-  // height: 100%;
   display: flex;
   flex-direction: column;
 
-  mat-icon {
-    // width: 18px;
-    // height: 18px;
+  .edit-buttons {
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+
+    .warning {
+      color: gray;
+      font-size: 12;
+      font-style: italic;
+      text-align: center;
+    }
   }
 }
 
@@ -137,7 +121,6 @@ a {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  // column-gap: 20px;
 }
 
 .rights-reserved {
